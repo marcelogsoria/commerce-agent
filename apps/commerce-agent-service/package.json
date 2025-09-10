@@ -19,14 +19,23 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@commercetools/platform-sdk": "^7.20.0",
+    "@commercetools/ts-client": "^2.1.2",
     "fastify": "^5.0.0",
     "fastify-plugin": "^5.0.0",
+    "@fastify/formbody": "^8.0.1",
     "@fastify/autoload": "^6.0.0",
     "@fastify/sensible": "^6.0.0",
-    "fastify-cli": "^7.4.0"
+    "fastify-cli": "^7.4.0",
+    "@langchain/core": "^0.3.18",
+    "@langchain/langgraph": "^0.2.21",
+    "@langchain/openai": "^0.3.14",
+    "twilio": "^5.5.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^22.1.0",
+    "@types/twilio": "^3.19.3",
     "c8": "^10.1.2",
     "ts-node": "^10.4.0",
     "concurrently": "^9.0.0",
