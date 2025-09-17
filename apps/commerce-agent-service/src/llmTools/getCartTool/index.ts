@@ -1,3 +1,3 @@
-import { getCartTool } from './getCartTool';
+import { createGetCartTool } from './getCartTool';
 
-export { getCartTool };
+export { createGetCartTool };
