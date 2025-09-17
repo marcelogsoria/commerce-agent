@@ -50,7 +50,6 @@ const getProductsFromCategoryTool = tool(
     schema: z.object({
       categoryId: z
         .string()
-
         .describe(
           'id de la categoría para obtener los productos de esa categoría',
         ),

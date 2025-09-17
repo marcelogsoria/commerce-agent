@@ -22,7 +22,7 @@ const getCategoriesTool = tool(
   {
     name: 'get_categories',
     description:
-      'Devuelve las caregorías de productos disponibles en Ingés. Devuelve un array de objetos en formato JSON con formato {name:"",id:""}',
+      'Devuelve las categorías de productos disponibles en Inglés. Devuelve un array de objetos en formato JSON con formato {name:"",id:""}',
     schema: z.object({
       parentId: z
         .string()
