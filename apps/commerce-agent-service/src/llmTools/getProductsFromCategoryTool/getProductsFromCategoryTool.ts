@@ -1,5 +1,6 @@
 import { tool } from '@langchain/core/tools';
 import z from 'zod';
+import { ctApiRoot } from '../../services/commercetools/apiRoot';
 
 const getProductsFromCategoryTool = tool(
   async ({ categoryId }: { categoryId: string }) => {
