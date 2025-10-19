@@ -17,7 +17,9 @@ const createCommerceGraph = ({
   tools: StructuredTool[];
   memory: BaseCheckpointSaver<number>;
 }) => {
-  const llm = new ChatOpenAI({ model: 'gpt-4o-mini' }).bindTools(tools);
+  const llm = new ChatOpenAI({
+    model: process.env.OPENAI_MODEL_NAME || 'gpt-4o-mini',
+  }).bindTools(tools);
 
   const callModel = async (state: typeof MessagesAnnotation.State) => {
     const response = await llm.invoke(state.messages);
