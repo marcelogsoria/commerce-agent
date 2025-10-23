@@ -1,0 +1,12 @@
+{
+  "servers": {
+    // This configures the commercetools Developer MCP server for use with Gemini.
+    // The server provides tools for interacting with commercetools documentation and APIs.
+    // A typical local name for the server is `commercetools-dev-content`.
+    "commercetools-dev-content": {
+      // The server is accessible via streamable HTTP only.
+      "type": "http",
+      "url": "https://docs.commercetools.com/apis/mcp"
+    }
+  }
+}

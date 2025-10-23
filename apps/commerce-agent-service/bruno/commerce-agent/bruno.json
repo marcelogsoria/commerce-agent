@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Commerce Agent",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
