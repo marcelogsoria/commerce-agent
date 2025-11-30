@@ -51,12 +51,37 @@ const commercetoolsAgentEssentials = new CommercetoolsAgentEssentials({
 });
 
 const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-  fastify.get('/', async function (request, reply) {
-    return { root: true };
+
+  fastify.get('/env-info', async function (request, reply) {
+    return {
+      twilioNumber,
+      commercetoolsProjectKey: process.env.CT_PROJECT_KEY,
+      nodeVersion: process.version,
+      langchain: {
+        core: require('@langchain/core/package.json').version,
+        langgraph: require('@langchain/langgraph/package.json').version,
+        openai: require('@langchain/openai/package.json').version,
+      },
+      accountSid,
+      clientId: process.env.CT_CLIENT_ID,
+    };
   });
 
   fastify.post('/message', async (request, reply) => {
-    const { Body, WaId } = request.body as TwilioMessage;
+    const body = request.body as TwilioMessage | { message: string };
+    let WaId: string;
+    let Body: string;
+    let isLocalTest = false;
+
+    if ('WaId' in body) {
+      WaId = body.WaId;
+      Body = body.Body;
+    } else {
+      WaId = 'local-test-thread';
+      Body = body.message;
+      isLocalTest = true;
+    }
+
     // Log the start of the request with the user's ID and message.
     fastify.log.info({ WaId, Body }, 'Processing incoming message');
 
@@ -95,16 +120,21 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       // Extract the last message from the output as the response.
       const modelResponse =
         output.messages[output.messages.length - 1].content.toString();
+      
+      if (isLocalTest) {
+        reply.send({ response: modelResponse });
+      } else {
+        // Send the response back to the user via Twilio WhatsApp.
+        // We prepend 'whatsapp:+' to the WaId to ensure it's in the correct E.164 format.
+        const messageResult = await twilioClient.messages.create({
+          from: twilioNumber,
+          to: `whatsapp:+${WaId}`,
+          body: modelResponse,
+        });
 
-      // Send the response back to the user via Twilio WhatsApp.
-      // We prepend 'whatsapp:+' to the WaId to ensure it's in the correct E.164 format.
-      const messageResult = await twilioClient.messages.create({
-        from: twilioNumber,
-        to: `whatsapp:+${WaId}`,
-        body: modelResponse,
-      });
-
-      fastify.log.info({ messageSid: messageResult.sid }, 'Successfully sent response via Twilio');
+        fastify.log.info({ messageSid: messageResult.sid }, 'Successfully sent response via Twilio');
+        reply.send({status: 'ok'});
+      }
     } catch (error) {
       // Enhance error logging to include the original request body for better context.
       fastify.log.error({ err: error, requestBody: request.body }, 'An error occurred while processing the message');
