@@ -104,6 +104,16 @@ Follow these instructions to set up and run the project locally for development.
     ```
     This command starts the `commerce-agent-service` in development mode with hot-reloading, so it will automatically restart when you make changes to the code.
 
+### Local Test Interface
+
+This project includes a web-based chat interface for local testing and development. This allows you to interact with the commerce agent directly in your browser without needing to configure Twilio or use WhatsApp.
+
+Once the development server is running, you can access the chat interface at:
+
+[http://localhost:3000/](http://localhost:3000/)
+
+The interface also displays useful environment information to help with debugging.
+
 ## 🗺️ Roadmap
 
 The development of this POC is broken down into several phases, from initial planning to deployment. For a detailed breakdown of tasks and current progress, please refer to the repository's **[GitHub Issues](https://github.com/marcelogsoria/commerce-agent/issues)** and **[Project Board](https://github.com/marcelogsoria/commerce-agent/projects)**.
