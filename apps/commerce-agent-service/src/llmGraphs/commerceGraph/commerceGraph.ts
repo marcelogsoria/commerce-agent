@@ -49,9 +49,7 @@ const createCommerceGraph = ({
     .addEdge('tools', 'model')
     .addConditionalEdges('model', shouldContinue, ['tools', END]);
 
-  const langGraphApp = workflow.compile({ checkpointer: memory });
-
-  return langGraphApp;
+  return workflow.compile({ checkpointer: memory });
 };
 
 export { createCommerceGraph };

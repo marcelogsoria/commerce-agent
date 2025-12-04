@@ -1,12 +1,21 @@
-import { test } from 'node:test'
-import * as assert from 'node:assert'
 import { build } from '../helper'
+import { FastifyInstance } from 'fastify'
 
-test('default root route', async (t) => {
-  const app = await build(t)
+describe('default root route', () => {
+  let app: FastifyInstance
 
-  const res = await app.inject({
-    url: '/'
+  beforeAll(async () => {
+    app = await build()
   })
-  assert.deepStrictEqual(JSON.parse(res.payload), { root: true })
+
+  afterAll(async () => {
+    await app.close()
+  })
+
+  it('should return the chat interface', async () => {
+    const res = await app.inject({
+      url: '/'
+    })
+    expect(res.payload).toContain('<title>Commerce Agent - Local Test</title>')
+  })
 })
