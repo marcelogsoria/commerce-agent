@@ -1,4 +1,4 @@
-import { DynamicTool } from '@langchain/core/tools';
+import { DynamicStructuredTool } from '@langchain/core/tools';
 import { z } from 'zod';
 
 // Define the schema for the tool's input.
@@ -11,7 +11,7 @@ const getDocumentationToolSchema = z.object({
 });
 
 // Create the documentation tool.
-export const getDocumentationTool = new DynamicTool({
+export const getDocumentationTool = new DynamicStructuredTool({
   name: 'search_commercetools_documentation',
   description: 'Searches the commercetools documentation to find answers to questions about the platform, API usage, and tool syntax. Use this when you are unsure how to perform a specific action or need to know the correct syntax for a query.',
   schema: getDocumentationToolSchema,
@@ -21,10 +21,10 @@ export const getDocumentationTool = new DynamicTool({
       if (limit) searchParams.append('limit', limit.toString());
       if (crowding) searchParams.append('crowding', crowding.toString());
       if (contentTypes) {
-        contentTypes.forEach(contentType => searchParams.append('contentTypes', contentType));
+        contentTypes.forEach((contentType: string) => searchParams.append('contentTypes', contentType));
       }
       if (products) {
-        products.forEach(product => searchParams.append('products', product));
+        products.forEach((product: string) => searchParams.append('products', product));
       }
 
       const url = `https://docs.commercetools.com/apis/rest/content/similar-content?${searchParams.toString()}`;
@@ -37,7 +37,10 @@ export const getDocumentationTool = new DynamicTool({
       const data = await response.json();
       return JSON.stringify(data);
     } catch (error) {
-      return `Error: An unexpected error occurred while fetching documentation: ${error.message}`;
+      if (error instanceof Error) {
+        return `Error: An unexpected error occurred while fetching documentation: ${error.message}`;
+      }
+      return 'Error: An unexpected error occurred while fetching documentation.';
     }
   },
 });

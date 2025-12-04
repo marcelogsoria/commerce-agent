@@ -3,70 +3,13 @@ import { FastifyPluginAsync } from 'fastify';
 import { TwilioMessage } from './types';
 import { createCommerceGraph } from '../llmGraphs/commerceGraph';
 import { MemorySaver } from '@langchain/langgraph';
-import { CommercetoolsAgentEssentials } from '@commercetools/agent-essentials/langchain';
-import twilio from 'twilio';
 import { HumanMessage, SystemMessage } from '@langchain/core/messages';
 import { prompt } from '../llmPrompts/agentBasePrompt';
 import { getDocumentationTool } from '../llmTools/getDocumentationTool';
 
-// --- Environment Variable Validation ---
-// Ensure all required Twilio environment variables are set.
-// The application will throw an error on startup if any are missing.
-const {
-  TWILIO_ACCOUNT_SID: accountSid,
-  TWILIO_AUTH_TOKEN: authToken,
-  TWILIO_NUMBER: twilioNumber,
-} = process.env;
-
-if (!accountSid || !authToken || !twilioNumber) {
-  throw new Error('Twilio environment variables (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_NUMBER) must be set.');
-}
-
-// Create a Twilio client with the validated credentials.
-const twilioClient = twilio(accountSid, authToken);
-
 const memory = new MemorySaver();
 
-// Configure the Commercetools Agent Essentials toolkit.
-// This will be our single source for all Commercetools-related tools.
-const commercetoolsAgentEssentials = new CommercetoolsAgentEssentials({
-  authConfig: {
-    type: 'client_credentials',
-    clientId: process.env.CT_CLIENT_ID!,
-    clientSecret: process.env.CT_CLIENT_SECRET!,
-    projectKey: process.env.CT_PROJECT_KEY!,
-    authUrl: process.env.CT_AUTH_URL!,
-    apiUrl: process.env.CT_API_URL!,
-  },
-  configuration: {
-    // Define which actions the agent is allowed to perform.
-    // This provides a great layer of security and control.
-    actions: {
-      products: { read: true },
-      category: { read: true },
-      cart: { read: true, create: true, update: true },
-      project: { read: true },
-    },
-  },
-});
-
-const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
-
-  fastify.get('/env-info', async function (request, reply) {
-    return {
-      twilioNumber,
-      commercetoolsProjectKey: process.env.CT_PROJECT_KEY,
-      nodeVersion: process.version,
-      langchain: {
-        core: require('@langchain/core/package.json').version,
-        langgraph: require('@langchain/langgraph/package.json').version,
-        openai: require('@langchain/openai/package.json').version,
-      },
-      accountSid,
-      clientId: process.env.CT_CLIENT_ID,
-    };
-  });
-
+const root: FastifyPluginAsync = async (fastify): Promise<void> => {
   fastify.post('/message', async (request, reply) => {
     const body = request.body as TwilioMessage | { message: string };
     let WaId: string;
@@ -87,7 +30,7 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
 
     try {
       // Get the array of tools from the Commercetools agent essentials toolkit.
-      const ctTools = commercetoolsAgentEssentials.getTools();
+      const ctTools = fastify.commercetools.getTools();
 
       // Add the documentation tool to the list of available tools.
       const tools = [...ctTools, getDocumentationTool];
@@ -126,8 +69,8 @@ const root: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       } else {
         // Send the response back to the user via Twilio WhatsApp.
         // We prepend 'whatsapp:+' to the WaId to ensure it's in the correct E.164 format.
-        const messageResult = await twilioClient.messages.create({
-          from: twilioNumber,
+        const messageResult = await fastify.twilio.messages.create({
+          from: fastify.twilioNumber,
           to: `whatsapp:+${WaId}`,
           body: modelResponse,
         });

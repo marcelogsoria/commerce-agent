@@ -1,6 +1,5 @@
 import { join } from 'node:path';
 import AutoLoad, { AutoloadPluginOptions } from '@fastify/autoload';
-import formbody from '@fastify/formbody';
 import { FastifyPluginAsync, FastifyServerOptions } from 'fastify';
 import fastifyStatic from '@fastify/static';
 
@@ -17,9 +16,6 @@ const app: FastifyPluginAsync<AppOptions> = async (
   fastify,
   opts,
 ): Promise<void> => {
-  // Place here your custom code!
-  void fastify.register(formbody);
-
   // This serves the static files for the chat interface
   void fastify.register(fastifyStatic, {
     root: join(__dirname, 'public'),

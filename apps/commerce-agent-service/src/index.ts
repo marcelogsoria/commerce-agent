@@ -18,7 +18,7 @@ const closeListeners = closeWithGrace({ delay: 500 }, async function ({ err }) {
   await server.close();
 });
 
-server.addHook('onClose', async (instance) => {
+server.addHook('onClose', async () => {
   // This hook is called when server.close() is invoked.
   closeListeners.uninstall();
 });
