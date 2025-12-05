@@ -36,7 +36,10 @@ const root: FastifyPluginAsync = async (fastify): Promise<void> => {
       const tools = [...ctTools, getDocumentationTool];
 
       // Log the names of the tools to confirm they were created successfully.
-      fastify.log.info({ tool_names: tools.map((t) => t.name) }, 'Generated Commercetools tools');
+      fastify.log.info(
+        { tool_names: tools.map((t) => t.name) },
+        'Generated Commercetools tools',
+      );
 
       const langGraphApp = createCommerceGraph({ tools, memory });
 
@@ -63,7 +66,7 @@ const root: FastifyPluginAsync = async (fastify): Promise<void> => {
       // Extract the last message from the output as the response.
       const modelResponse =
         output.messages[output.messages.length - 1].content.toString();
-      
+
       if (isLocalTest) {
         reply.send({ response: modelResponse });
       } else {
@@ -75,12 +78,18 @@ const root: FastifyPluginAsync = async (fastify): Promise<void> => {
           body: modelResponse,
         });
 
-        fastify.log.info({ messageSid: messageResult.sid }, 'Successfully sent response via Twilio');
-        reply.send({status: 'ok'});
+        fastify.log.info(
+          { messageSid: messageResult.sid },
+          'Successfully sent response via Twilio',
+        );
+        reply.send({ status: 'ok' });
       }
     } catch (error) {
       // Enhance error logging to include the original request body for better context.
-      fastify.log.error({ err: error, requestBody: request.body }, 'An error occurred while processing the message');
+      fastify.log.error(
+        { err: error, requestBody: request.body },
+        'An error occurred while processing the message',
+      );
       reply.status(500).send({ error: 'Error procesando el mensaje' });
     }
   });

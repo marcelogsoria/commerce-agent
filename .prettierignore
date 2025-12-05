@@ -1,0 +1,8 @@
+node_modules
+dist
+coverage
+package-lock.json
+.turbo
+.idea
+.husky/pre-commit
+.prettierrc

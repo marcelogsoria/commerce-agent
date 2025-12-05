@@ -4,63 +4,62 @@ const chatMessages = document.getElementById('chat-messages');
 const envInfo = document.getElementById('env-info');
 
 async function sendMessage() {
-    const message = messageInput.value.trim();
-    if (!message) {
-        return;
+  const message = messageInput.value.trim();
+  if (!message) {
+    return;
+  }
+
+  // Create and append user message
+  const userMessageElement = document.createElement('div');
+  userMessageElement.classList.add('message', 'user-message');
+  userMessageElement.textContent = message;
+  chatMessages.appendChild(userMessageElement);
+
+  // Clear input and scroll to bottom
+  messageInput.value = '';
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  try {
+    const response = await fetch('/message', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
     }
 
-    // Create and append user message
-    const userMessageElement = document.createElement('div');
-    userMessageElement.classList.add('message', 'user-message');
-    userMessageElement.textContent = message;
-    chatMessages.appendChild(userMessageElement);
+    const data = await response.json();
 
-    // Clear input and scroll to bottom
-    messageInput.value = '';
+    // Create and append agent message
+    const agentMessageElement = document.createElement('div');
+    agentMessageElement.classList.add('message', 'agent-message');
+    agentMessageElement.textContent = data.response;
+    chatMessages.appendChild(agentMessageElement);
+
+    // Scroll to bottom
     chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    try {
-        const response = await fetch('/message', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ message })
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-
-        // Create and append agent message
-        const agentMessageElement = document.createElement('div');
-        agentMessageElement.classList.add('message', 'agent-message');
-        agentMessageElement.textContent = data.response;
-        chatMessages.appendChild(agentMessageElement);
-
-        // Scroll to bottom
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    } catch (error) {
-        console.error('Error sending message:', error);
-        const errorMessageElement = document.createElement('div');
-        errorMessageElement.classList.add('message', 'agent-message');
-        errorMessageElement.style.backgroundColor = '#ffcccb';
-        errorMessageElement.textContent = 'Sorry, something went wrong.';
-        chatMessages.appendChild(errorMessageElement);
-    }
+  } catch (error) {
+    console.error('Error sending message:', error);
+    const errorMessageElement = document.createElement('div');
+    errorMessageElement.classList.add('message', 'agent-message');
+    errorMessageElement.style.backgroundColor = '#ffcccb';
+    errorMessageElement.textContent = 'Sorry, something went wrong.';
+    chatMessages.appendChild(errorMessageElement);
+  }
 }
 
 async function loadEnvInfo() {
-    try {
-        const response = await fetch('/env-info');
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        envInfo.innerHTML = `
+  try {
+    const response = await fetch('/env-info');
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    envInfo.innerHTML = `
             <div>
                 <h3>Commercetools</h3>
                 <ul>
@@ -90,17 +89,17 @@ async function loadEnvInfo() {
                 </ul>
             </div>
         `;
-    } catch (error) {
-        console.error('Error loading env info:', error);
-        envInfo.innerHTML = '<p>Could not load environment information.</p>';
-    }
+  } catch (error) {
+    console.error('Error loading env info:', error);
+    envInfo.innerHTML = '<p>Could not load environment information.</p>';
+  }
 }
 
 sendButton.addEventListener('click', sendMessage);
 messageInput.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
-        sendMessage();
-    }
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
 });
 
 window.addEventListener('load', loadEnvInfo);

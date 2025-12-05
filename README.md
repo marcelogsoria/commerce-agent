@@ -29,21 +29,21 @@ The specific goals for this initial version are:
 
 This project is being built with a modern, scalable stack:
 
-*   **Backend:** TypeScript, Node.js, Fastify
-*   **AI / LLM:** LangChain.js, OpenAI / Google Gemini
-*   **Commerce Platform:** Commercetools (via `@commercetools/agent-essentials`)
-*   **Messaging Platform:** Twilio (for WhatsApp)
-*   **Database:** The POC currently uses an in-memory store for conversation history. PostgreSQL is planned for future development.
-*   **Containerization:** Docker (Note: Docker setup is planned but not yet implemented in the POC).
+- **Backend:** TypeScript, Node.js, Fastify
+- **AI / LLM:** LangChain.js, OpenAI / Google Gemini
+- **Commerce Platform:** Commercetools (via `@commercetools/agent-essentials`)
+- **Messaging Platform:** Twilio (for WhatsApp)
+- **Database:** The POC currently uses an in-memory store for conversation history. PostgreSQL is planned for future development.
+- **Containerization:** Docker (Note: Docker setup is planned but not yet implemented in the POC).
 
 ## 🏢 Project Structure
 
 This project is a monorepo using npm workspaces.
 
-*   `apps/`: Contains the individual, runnable applications.
-    *   `commerce-agent-service`: The main backend service that handles incoming messages and orchestrates the AI agent.
-*   `packages/`: Contains shared code, configurations, and utilities.
-    *   `typescript-config`: Shared TypeScript configurations for the monorepo.
+- `apps/`: Contains the individual, runnable applications.
+  - `commerce-agent-service`: The main backend service that handles incoming messages and orchestrates the AI agent.
+- `packages/`: Contains shared code, configurations, and utilities.
+  - `typescript-config`: Shared TypeScript configurations for the monorepo.
 
 ## 🚀 Getting Started
 
@@ -51,10 +51,10 @@ Follow these instructions to set up and run the project locally for development.
 
 ### Prerequisites
 
-*   Node.js (v22 or higher)
-*   Docker
-*   A Twilio account with a WhatsApp-enabled number.
-*   A Commercetools project.
+- Node.js (v22 or higher)
+- Docker
+- A Twilio account with a WhatsApp-enabled number.
+- A Commercetools project.
 
 ### Installation
 
@@ -83,17 +83,17 @@ Follow these instructions to set up and run the project locally for development.
 2.  **Edit the environment variables:**
     Open the newly created `.env` file and fill in the required values.
 
-| Variable                  | Description                                                                                             |
-| ------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `OPENAI_MODEL_NAME`       | The name of the OpenAI model to use (e.g., `gpt-4o-mini`).                                                |
-| `TWILIO_ACCOUNT_SID`      | Your Twilio Account SID.                                                                                |
-| `TWILIO_AUTH_TOKEN`       | Your Twilio Auth Token.                                                                                 |
-| `TWILIO_NUMBER`           | Your Twilio phone number associated with the WhatsApp sender.                                           |
-| `CT_PROJECT_KEY`          | The project key of your Commercetools project.                                                          |
-| `CT_CLIENT_ID`            | The client ID for your Commercetools API client.                                                        |
-| `CT_CLIENT_SECRET`        | The client secret for your Commercetools API client.                                                    |
-| `CT_AUTH_URL`             | The authentication URL for your Commercetools project.                                                  |
-| `CT_API_URL`              | The API URL for your Commercetools project.                                                             |
+| Variable             | Description                                                   |
+| -------------------- | ------------------------------------------------------------- |
+| `OPENAI_MODEL_NAME`  | The name of the OpenAI model to use (e.g., `gpt-4o-mini`).    |
+| `TWILIO_ACCOUNT_SID` | Your Twilio Account SID.                                      |
+| `TWILIO_AUTH_TOKEN`  | Your Twilio Auth Token.                                       |
+| `TWILIO_NUMBER`      | Your Twilio phone number associated with the WhatsApp sender. |
+| `CT_PROJECT_KEY`     | The project key of your Commercetools project.                |
+| `CT_CLIENT_ID`       | The client ID for your Commercetools API client.              |
+| `CT_CLIENT_SECRET`   | The client secret for your Commercetools API client.          |
+| `CT_AUTH_URL`        | The authentication URL for your Commercetools project.        |
+| `CT_API_URL`         | The API URL for your Commercetools project.                   |
 
 ### Running the Application
 
@@ -146,8 +146,8 @@ The development of this POC is broken down into several phases, from initial pla
 
 For detailed documentation, including:
 
-*   Architectural Diagrams
-*   Phase 0 Definitions (Product, Audience, etc.)
-*   Architecture Decision Records (ADR)
+- Architectural Diagrams
+- Phase 0 Definitions (Product, Audience, etc.)
+- Architecture Decision Records (ADR)
 
 Please see the **[Official Project Wiki](https://github.com/marcelogsoria/commerce-agent/wiki)**.
