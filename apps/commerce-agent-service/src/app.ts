@@ -4,8 +4,7 @@ import { FastifyPluginAsync, FastifyServerOptions } from 'fastify';
 import fastifyStatic from '@fastify/static';
 
 export interface AppOptions
-  extends FastifyServerOptions,
-    Partial<AutoloadPluginOptions> {}
+  extends FastifyServerOptions, Partial<AutoloadPluginOptions> {}
 
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {

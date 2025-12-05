@@ -11,7 +11,9 @@ const {
 } = process.env;
 
 if (!accountSid || !authToken || !twilioNumber) {
-  throw new Error('Twilio environment variables (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_NUMBER) must be set.');
+  throw new Error(
+    'Twilio environment variables (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_NUMBER) must be set.',
+  );
 }
 
 // --- Twilio Client Initialization ---

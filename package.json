@@ -6,10 +6,20 @@
   "scripts": {
     "dev": "turbo dev",
     "test": "turbo test",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky install"
   },
   "devDependencies": {
-    "turbo": "^2.5.6"
+    "turbo": "^2.5.6",
+    "prettier": "^3.3.3",
+    "eslint-config-prettier": "^9.1.0",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.7"
   },
-  "packageManager": "npm@11.6.0"
+  "packageManager": "npm@11.6.0",
+  "lint-staged": {
+    "*.{js,ts,json,md,html,css}": "prettier --write"
+  }
 }
