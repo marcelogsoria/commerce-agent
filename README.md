@@ -34,7 +34,7 @@ This project is being built with a modern, scalable stack:
 *   **Commerce Platform:** Commercetools (via `@commercetools/agent-essentials`)
 *   **Messaging Platform:** Twilio (for WhatsApp)
 *   **Database:** The POC currently uses an in-memory store for conversation history. PostgreSQL is planned for future development.
-*   **Containerization:** Docker
+*   **Containerization:** Docker (Note: Docker setup is planned but not yet implemented in the POC).
 
 ## 🏢 Project Structure
 
@@ -103,6 +103,30 @@ Follow these instructions to set up and run the project locally for development.
     npm run dev
     ```
     This command starts the `commerce-agent-service` in development mode with hot-reloading, so it will automatically restart when you make changes to the code.
+
+### Testing and Linting
+
+This project is set up with Jest for testing and ESLint for linting.
+
+**Running Tests**
+
+To run the test suite, run the following command from the root of the project:
+
+```bash
+npm test
+```
+
+**Running Linting**
+
+To check the code for linting errors, run the following command from the root of the project:
+
+```bash
+npm run lint
+```
+
+### CI/CD
+
+This project uses GitHub Actions to run linting and testing on every pull request and on every push to the `main` branch. You can see the workflow configuration in `.github/workflows/ci.yml`.
 
 ### Local Test Interface
 
