@@ -1,6 +1,14 @@
 import { build } from '../helper';
 import { FastifyInstance } from 'fastify';
 
+jest.mock('../../src/llmGraphs/commerceGraph', () => ({
+  createCommerceGraph: jest.fn(() => ({
+    invoke: jest.fn().mockResolvedValue({
+      messages: [{ content: 'mocked response' }],
+    }),
+  })),
+}));
+
 describe('default root route', () => {
   let app: FastifyInstance;
 
@@ -12,10 +20,14 @@ describe('default root route', () => {
     await app.close();
   });
 
-  it('should return the chat interface', async () => {
+  it('should return a mocked response from the AI', async () => {
     const res = await app.inject({
-      url: '/',
+      method: 'POST',
+      url: '/message',
+      payload: {
+        message: 'hello',
+      },
     });
-    expect(res.payload).toContain('<title>Commerce Agent - Local Test</title>');
+    expect(res.json()).toEqual({ response: 'mocked response' });
   });
 });
