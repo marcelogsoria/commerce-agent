@@ -10,6 +10,17 @@ import { getDocumentationTool } from '../llmTools/getDocumentationTool';
 const memory = new MemorySaver();
 
 const root: FastifyPluginAsync = async (fastify): Promise<void> => {
+  const ctTools = fastify.commercetools.getTools();
+
+  const tools = [...ctTools, getDocumentationTool];
+
+  fastify.log.info(
+    { tool_names: tools.map((t) => t.name) },
+    'Generated Commercetools tools',
+  );
+
+  const langGraphApp = createCommerceGraph({ tools, memory });
+
   fastify.post('/message', async (request, reply) => {
     const body = request.body as TwilioMessage | { message: string };
     let WaId: string;
@@ -29,20 +40,6 @@ const root: FastifyPluginAsync = async (fastify): Promise<void> => {
     fastify.log.info({ WaId, Body }, 'Processing incoming message');
 
     try {
-      // Get the array of tools from the Commercetools agent essentials toolkit.
-      const ctTools = fastify.commercetools.getTools();
-
-      // Add the documentation tool to the list of available tools.
-      const tools = [...ctTools, getDocumentationTool];
-
-      // Log the names of the tools to confirm they were created successfully.
-      fastify.log.info(
-        { tool_names: tools.map((t) => t.name) },
-        'Generated Commercetools tools',
-      );
-
-      const langGraphApp = createCommerceGraph({ tools, memory });
-
       const config = { configurable: { thread_id: WaId } };
 
       // Retrieve previous messages for this conversation thread.
